@@ -1,0 +1,46 @@
+from flask import Blueprint, request, current_app
+from utils import restful
+from openai import OpenAI
+from urllib.parse import urlparse
+from exts import cache
+
+bp = Blueprint("ai", __name__, url_prefix="/ai")
+
+
+@bp.route("/summary")
+def get_ai_summary():  # put application's code here
+    referer = request.referrer
+    if referer is None or 'baispace.cn' not in referer:
+        return restful.params_error('不被允许的站点')
+
+    url = request.args.get("url")
+    content = request.args.get("content")
+    if url is None or content is None:
+        return restful.params_error('参数不能为空')
+
+    parsed_url = urlparse(url)
+    article_path_key = 'blog:' + parsed_url.path
+    model_reply = cache.get(article_path_key)
+
+    if model_reply is not None:
+        return restful.ok('ok', {'summary': model_reply})
+
+    ali_client = OpenAI(
+        api_key=current_app.config['ALI_API_KEY'],
+        base_url=current_app.config['ALI_API_URL']
+    )
+
+    promote = '你是一个摘要生成工具，请根据我发送的内容生成一段不超过300字的简洁中文摘要，请直接回答这篇文章讲述了什么。摘要应不包含任何链接，并且仅限于描述文章的主要内容，无需提出建议或指出缺失的部分，也不需要提及用户。'
+
+    completion = ali_client.chat.completions.create(
+        model="qwen-turbo",
+        messages=[
+            {'role': 'system', 'content': promote},
+            {'role': 'user', 'content': content}]
+    )
+    model_reply = completion.choices[0].message.content
+
+    # 设置缓存，过期时间7
+    cache.set(article_path_key, model_reply, timeout=60 * 60 * 24 * 7)
+
+    return restful.ok('ok', {'summary': model_reply})
