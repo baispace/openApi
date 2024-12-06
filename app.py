@@ -9,8 +9,8 @@ from flask_cors import CORS
 
 
 app = Flask(__name__)
-app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
 app.config.from_object(config.DevelopmentConfig)
+app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
 
 db.init_app(app)
 cache.init_app(app)
