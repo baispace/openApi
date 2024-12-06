@@ -31,11 +31,9 @@ def permission_error(message="没有权限访问！"):
     return _restful_result(code=HttpCode.paramserror, message=message,
                            data=None)
 
-
 def params_error(message="参数错误！"):
     return _restful_result(code=HttpCode.paramserror, message=message,
                            data=None)
-
 
 def server_error(message="服务器开小差啦！"):
     return _restful_result(code=HttpCode.servererror, message=message or
