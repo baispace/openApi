@@ -8,7 +8,7 @@ from blueprints.front import bp as front_bp
 
 
 app = Flask(__name__)
-app.config.from_object(config.DevelopmentConfig)
+app.config.from_object(config.ProductionConfig)
 
 db.init_app(app)
 cache.init_app(app)
