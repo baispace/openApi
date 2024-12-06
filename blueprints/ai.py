@@ -11,12 +11,13 @@ bp = Blueprint("ai", __name__, url_prefix="/ai")
 def get_ai_summary():  # put application's code here
     referer = request.referrer
     if referer is None or 'baispace.cn' not in referer:
-        return restful.params_error('不被允许的站点')
+        return restful.ok('参数为空')
 
     url = request.args.get("url")
     content = request.args.get("content")
     if url is None or content is None:
-        return restful.params_error('参数不能为空')
+        return restful.ok('参数为空')
+
 
     parsed_url = urlparse(url)
     article_path_key = 'blog:' + parsed_url.path
