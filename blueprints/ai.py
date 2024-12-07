@@ -38,6 +38,7 @@ def get_ai_summary():  # put application's code here
             {'role': 'system', 'content': promote},
             {'role': 'user', 'content': content}]
     )
+
     model_reply = completion.choices[0].message.content
 
     # 设置缓存，过期时间7
