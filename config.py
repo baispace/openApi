@@ -1,32 +1,42 @@
+import os
+from dotenv import load_dotenv
+
+# 根据环境加载不同的 .env 文件
+if os.environ.get('FLASK_ENV') == 'production':
+    load_dotenv('.env.production')  # 加载生产环境的配置
+else:
+    load_dotenv('.env')  # 加载测试环境的配置
+
 class BaseConfig:
     SECRET_KEY = "your secret key"
 
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
-class DevelopmentConfig(BaseConfig):
-    SQLALCHEMY_DATABASE_URI = "mysql+pymysql://api-dev:FZxaDGsN5f7DJSMw@39.106.227.149:3306/api-dev?charset = utf8mb4"
+    SQLALCHEMY_DATABASE_URI = os.getenv('SQLALCHEMY_DATABASE_URI')
 
     # 缓存配置
-    CACHE_TYPE = "RedisCache"
-    CACHE_REDIS_HOST = "127.0.0.1"
-    CACHE_REDIS_PORT = 6379
+    CACHE_TYPE = os.getenv('CACHE_TYPE')
+    CACHE_REDIS_HOST = os.getenv('CACHE_REDIS_HOST')
+    CACHE_REDIS_PORT = os.getenv('CACHE_REDIS_PORT')
 
-    ALI_API_KEY = 'sk-ef91cf1db4b04a6b9851bbb87fda42e7'
-    #ALI_API_URL = 'https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation/generation'
-    ALI_API_URL = 'https://dashscope.aliyuncs.com/compatible-mode/v1'
+    # 阿里配置文件
+    ALI_API_KEY = os.getenv('ALI_API_KEY')
+    ALI_API_URL = os.getenv('ALI_API_URL')
+
+
+class DevelopmentConfig(BaseConfig):
+    SQLALCHEMY_DATABASE_URI =  os.getenv('SQLALCHEMY_DATABASE_URI')
+
 
 class TestingConfig(BaseConfig):
-    SQLALCHEMY_DATABASE_URI = "mysql+pymysql://[测试服务器MySQL用户名]:[测试服务器MySQL密码]@[测试服务器MySQL域名]:[测试服务器MySQL端口号] / pythonbbs?charset = utf8mb4"
+    SQLALCHEMY_DATABASE_URI = os.getenv('SQLALCHEMY_DATABASE_URI')
 
 
 class ProductionConfig(BaseConfig):
-    SQLALCHEMY_DATABASE_URI = "mysql+pymysql://api-dev:FZxaDGsN5f7DJSMw@39.106.227.149:3306/api-dev?charset = utf8mb4"
+    SQLALCHEMY_DATABASE_URI = os.getenv('SQLALCHEMY_DATABASE_URI')
 
-    # 缓存配置
-    CACHE_TYPE = "RedisCache"
-    CACHE_REDIS_HOST = "127.0.0.1"
-    CACHE_REDIS_PORT = 6379
-
-    ALI_API_KEY = 'sk-ef91cf1db4b04a6b9851bbb87fda42e7'
-    # ALI_API_URL = 'https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation/generation'
-    ALI_API_URL = 'https://dashscope.aliyuncs.com/compatible-mode/v1'
+config = {
+    'development': DevelopmentConfig,
+    'testing': TestingConfig,
+    'production': ProductionConfig
+}
