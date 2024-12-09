@@ -23,18 +23,18 @@ def ok(message=None, data=None):
 
 
 def unlogin_error(message="没有登录！"):
-    return _restful_result(code=HttpCode.unloginerror, message=message,
-                           data=None)
+    return _restful_result(code=HttpCode.unloginerror, message=message, data=None)
 
 
 def permission_error(message="没有权限访问！"):
-    return _restful_result(code=HttpCode.paramserror, message=message,
-                           data=None)
+    return _restful_result(code=HttpCode.paramserror, message=message, data=None)
+
 
 def params_error(message="参数错误！"):
-    return _restful_result(code=HttpCode.paramserror, message=message,
-                           data=None)
+    return _restful_result(code=HttpCode.paramserror, message=message, data=None)
+
 
 def server_error(message="服务器开小差啦！"):
-    return _restful_result(code=HttpCode.servererror, message=message or
-                                                              '服务器内部错误', data=None)
+    return _restful_result(
+        code=HttpCode.servererror, message=message or "服务器内部错误", data=None
+    )
