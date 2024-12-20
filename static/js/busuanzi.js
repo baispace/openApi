@@ -1,6 +1,6 @@
 !function () {
     var t = ["site_pv", "site_uv", "page_pv", "page_uv"], e = document.currentScript, a = e.hasAttribute("pjax"),
-        n = e.getAttribute("data-api") || "https://busuanzi.baispace.cn/api",
+        n = e.getAttribute("data-api") || "https://open.baispace.cn/busuanzi/get_or_set_api",
         i = e.getAttribute("data-prefix") || "busuanzi", r = "bsz-id", s = function () {
             var e = new XMLHttpRequest;
             e.open("POST", n, !0);
