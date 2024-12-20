@@ -1,7 +1,7 @@
 import hashlib
 import jwt
 from flask import current_app, jsonify, request
-from exts import cache, redis
+from exts import redis
 
 
 def get_user_identity():
@@ -57,7 +57,7 @@ def get_redis_keys(host, path):
     site_unique = hashlib.md5(host.encode()).hexdigest()
     path_unique = hashlib.md5(path.encode()).hexdigest()
 
-    redis_prefix = "busuanzi"  # 更换为实际的 Redis 前缀
+    redis_prefix = "bsz"  # 更换为实际的 Redis 前缀
 
     site_uv_key = f"{redis_prefix}:site_uv:{site_unique}"
     page_uv_key = f"{redis_prefix}:page_uv:{site_unique}:{path_unique}"
