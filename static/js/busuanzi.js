@@ -8,7 +8,7 @@
             null != a && e.setRequestHeader("Authorization", "Bearer " + a), e.setRequestHeader("x-bsz-referer", window.location.href), e.onreadystatechange = function () {
                 if (4 === e.readyState && 200 === e.status) {
                     var a = JSON.parse(e.responseText);
-                    if (!0 === a.success) {
+                    if (200 == a.code) {
                         t.map((function (t) {
                             var e = document.getElementById("".concat(i, "_").concat(t));
                             null != e && (e.innerHTML = a.data[t]);
