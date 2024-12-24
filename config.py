@@ -9,7 +9,7 @@ else:
 
 
 class BaseConfig:
-    SECRET_KEY = "your secret key"
+    SECRET_KEY = os.getenv("SECRET_KEY")
 
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
@@ -23,6 +23,10 @@ class BaseConfig:
     # 阿里配置文件
     ALI_API_KEY = os.getenv("ALI_API_KEY")
     ALI_API_URL = os.getenv("ALI_API_URL")
+
+    REDIS_HOST = os.getenv("REDIS_HOST", "localhost")
+    REDIS_PORT = int(os.getenv("REDIS_PORT", 6379))
+    REDIS_DB = int(os.getenv("REDIS_DB", 1))
 
 
 class DevelopmentConfig(BaseConfig):

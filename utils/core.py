@@ -37,6 +37,11 @@ def site_count(host, path, user_identity):
     site_pv = redis.incr(rk.get("site_pv_key"))
     page_pv = redis.zincrby(rk.get("page_pv_key"), 1, rk.get("path_unique"))
 
+    user_identity = str(user_identity)
+    print(
+        f"user_identity: '{user_identity}' - type: {type(user_identity)} - encoded: {user_identity.encode('utf-8')}"
+    )
+
     # siteUv 和 pageUv 使用 HyperLogLog 存储
     redis.pfadd(rk.get("site_uv_key"), user_identity)
     redis.pfadd(rk.get("page_uv_key"), user_identity)
@@ -48,7 +53,7 @@ def site_count(host, path, user_identity):
     return {
         "site_pv": site_pv,
         "site_uv": site_uv,
-        "page_pv": page_pv,
+        "page_pv": int(page_pv),
         "page_uv": page_uv,
     }
 

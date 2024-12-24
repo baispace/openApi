@@ -1,5 +1,5 @@
 from flask import Flask, current_app
-from exts import db, cache
+from exts import db, cache, redis
 from blueprints.ai import bp as ai_bp
 from blueprints.busuanzi import bp as busuanzi_bp
 from blueprints.front import bp as front_bp
@@ -16,6 +16,12 @@ app.config.from_object(config_env.get(config_name))
 db.init_app(app)
 cache.init_app(app)
 CORS(app)
+redis.__init__(
+    host=app.config["REDIS_HOST"],
+    port=app.config["REDIS_PORT"],
+    db=app.config["REDIS_DB"],
+    decode_responses=True,
+)
 
 # 注册蓝图
 app.register_blueprint(ai_bp)
