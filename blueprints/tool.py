@@ -15,8 +15,8 @@ def get_img_rgb():
     if not image_url:
         return restful.params_error("No URL provided")
 
-    image_url_key = core.calculate_md5(image_url)
-    hex_color = "blog:" + cache.get(image_url_key)
+    image_url_key = "blog:" + core.calculate_md5(image_url)
+    hex_color = cache.get(image_url_key)
     if hex_color is not None:
         return jsonify({"RGB": hex_color})
 
