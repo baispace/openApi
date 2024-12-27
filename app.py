@@ -2,6 +2,7 @@ from flask import Flask, current_app
 from exts import db, cache, redis
 from blueprints.ai import bp as ai_bp
 from blueprints.busuanzi import bp as busuanzi_bp
+from blueprints.tool import bp as tool_bp
 from blueprints.front import bp as front_bp
 from flask_cors import CORS
 from config import config_env
@@ -27,6 +28,7 @@ redis.__init__(
 app.register_blueprint(ai_bp)
 app.register_blueprint(busuanzi_bp)
 app.register_blueprint(front_bp)
+app.register_blueprint(tool_bp)
 
 if __name__ == "__main__":
     app.run()

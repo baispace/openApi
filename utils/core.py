@@ -1,7 +1,12 @@
 import hashlib
 import jwt
-from flask import current_app, jsonify, request
+from flask import current_app, request
 from exts import redis
+import requests
+from PIL import Image
+from io import BytesIO
+import numpy as np
+from sklearn.cluster import KMeans
 
 
 def get_user_identity():
@@ -76,3 +81,47 @@ def get_redis_keys(host, path):
         "page_pv_key": page_pv_key,
         "path_unique": path_unique,
     }
+
+
+def get_image_color(image_url):
+    # 下载图片
+    response = requests.get(image_url)
+    img = Image.open(BytesIO(response.content))
+
+    # 将图片转换为 RGB 模式（如果不是的话）
+    img = img.convert("RGB")
+
+    # 调整图片大小以加快处理速度
+    img = img.resize((100, 100))
+
+    # 将图片转换为数组
+    img_array = np.array(img)
+
+    # 确保数组的形状是 (n_pixels, 3)
+    img_array = img_array.reshape(-1, 3)  # 变为 (n_pixels, 3)
+
+    # 使用 KMeans 聚类获取主题色
+    kmeans = KMeans(n_clusters=5)
+    kmeans.fit(img_array)
+
+    # 获取聚类中心（主题色）
+    colors = kmeans.cluster_centers_
+
+    # 返回主题色（取第一个聚类中心的颜色）
+    dominant_color = colors[0].astype(int)  # 转换为整数
+    return tuple(dominant_color)
+
+
+def rgb_to_hex(rgb):
+    return "#" + "".join(f"{int(c):02x}" for c in rgb)
+
+
+def calculate_md5(input_string):
+    # 创建 MD5 哈希对象
+    md5_hash = hashlib.md5()
+
+    # 更新哈希对象以包含输入字符串的字节
+    md5_hash.update(input_string.encode("utf-8"))
+
+    # 获取十六进制的哈希值
+    return md5_hash.hexdigest()
