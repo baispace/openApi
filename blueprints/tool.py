@@ -24,7 +24,7 @@ def get_img_rgb():
         rgb_color = core.get_image_color(image_url)
         hex_color = core.rgb_to_hex(rgb_color)  # 转换为 HEX 色号
         # 设置缓存，过期时间7
-        redis.set(image_url_key, hex_color, timeout=60 * 60 * 24 * 7)
+        redis.setex(image_url_key, 60 * 60 * 24 * 7, hex_color)
         return jsonify({"RGB": hex_color})
     except Exception as e:
         return jsonify({"error": str(e)}), 500

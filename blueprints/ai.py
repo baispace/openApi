@@ -42,7 +42,7 @@ def get_ai_summary():  # put application's code here
         )
         model_reply = completion.choices[0].message.content
         # 设置缓存，过期时间7
-        redis.set(article_path_key, model_reply, timeout=60 * 60 * 24 * 7)
+        redis.setex(article_path_key, 60 * 60 * 24 * 7, model_reply)
     except Exception as e:
         return restful.server_error(e)
 
