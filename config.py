@@ -11,14 +11,11 @@ else:
 class BaseConfig:
     SECRET_KEY = os.getenv("SECRET_KEY")
 
+    BUSUANZI_JWT_SECRET_KEY = os.getenv("BUSUANZI_JWT_SECRET_KEY")
+
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
     SQLALCHEMY_DATABASE_URI = os.getenv("SQLALCHEMY_DATABASE_URI")
-
-    # 缓存配置
-    CACHE_TYPE = os.getenv("CACHE_TYPE")
-    CACHE_REDIS_HOST = os.getenv("CACHE_REDIS_HOST")
-    CACHE_REDIS_PORT = os.getenv("CACHE_REDIS_PORT")
 
     # 阿里配置文件
     ALI_API_KEY = os.getenv("ALI_API_KEY")

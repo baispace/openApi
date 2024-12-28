@@ -1,5 +1,5 @@
 from flask import Flask, current_app
-from exts import db, cache, redis
+from exts import db, redis
 from blueprints.ai import bp as ai_bp
 from blueprints.busuanzi import bp as busuanzi_bp
 from blueprints.tool import bp as tool_bp
@@ -15,7 +15,6 @@ config_name = os.environ.get("FLASK_ENV", "development")
 app.config.from_object(config_env.get(config_name))
 
 db.init_app(app)
-cache.init_app(app)
 CORS(app)
 redis.__init__(
     host=app.config["REDIS_HOST"],

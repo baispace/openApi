@@ -7,6 +7,7 @@ from PIL import Image
 from io import BytesIO
 import numpy as np
 from sklearn.cluster import KMeans
+import secrets
 
 
 def get_user_identity():
@@ -18,21 +19,67 @@ def get_user_identity():
 
 
 def generate_jwt(user_identity):
-    return jwt.encode(
-        {"identity": user_identity}, current_app.config["SECRET_KEY"], algorithm="HS256"
-    )
+    # return jwt.encode(
+    #     {"identity": user_identity},
+    #     current_app.config["BUSUANZI_JWT_SECRET_KEY"],
+    #     algorithm="HS256",
+    # )
+    sign = sha256_hash(user_identity, current_app.config["BUSUANZI_JWT_SECRET_KEY"])
+    return f"{user_identity}.{sign}"
+
+
+def sha256_hash(text: str, salt: str) -> str:
+    """
+    使用SHA1生成哈希值（注意：原函数使用的是SHA1，而非SHA256）
+
+    :param text: 待哈希的文本
+    :param salt: 盐值
+    :return: 十六进制格式的哈希字符串
+    """
+    # 创建SHA1哈希对象
+    hasher = hashlib.sha1()
+
+    # 更新哈希对象
+    hasher.update(text.encode("utf-8"))
+    hasher.update(salt.encode("utf-8"))
+
+    # 获取哈希摘要并转换为十六进制字符串
+    return hasher.hexdigest()
 
 
 def check_jwt(token):
-    try:
-        decoded = jwt.decode(
-            token, current_app.config["SECRET_KEY"], algorithms=["HS256"]
-        )
-        return decoded.get("identity")
-    except jwt.ExpiredSignatureError:
+    # try:
+    #     decoded = jwt.decode(
+    #         token, current_app.config["BUSUANZI_JWT_SECRET_KEY"], algorithms=["HS256"]
+    #     )
+    #     return decoded.get("identity")
+    # except jwt.ExpiredSignatureError:
+    #     return ""
+    # except jwt.InvalidTokenError:
+    #     return "
+    """
+    验证token
+    :param token: 待验证的token
+    :return: 如果验证成功返回用户标识，否则返回空字符串
+    """
+    # 分割token
+    parts = token.split(".")
+
+    # 检查token格式
+    if len(parts) != 2:
         return ""
-    except jwt.InvalidTokenError:
-        return ""
+
+    # 验证签名
+    user_identity, provided_sign = parts
+    calculated_sign = sha256_hash(
+        user_identity, current_app.config["BUSUANZI_JWT_SECRET_KEY"]
+    )
+
+    # 安全比较签名
+    if secrets.compare_digest(calculated_sign, provided_sign):
+        return user_identity
+
+    return ""
 
 
 def site_count(host, path, user_identity):

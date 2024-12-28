@@ -2,7 +2,7 @@ from flask import Blueprint, request, current_app
 from utils import restful
 from openai import OpenAI
 from urllib.parse import urlparse
-from exts import cache
+from exts import redis
 
 bp = Blueprint("ai", __name__, url_prefix="/ai")
 
@@ -22,7 +22,7 @@ def get_ai_summary():  # put application's code here
 
     parsed_url = urlparse(url)
     article_path_key = "blog:" + parsed_url.path
-    model_reply = cache.get(article_path_key)
+    model_reply = redis.get(article_path_key)
 
     if model_reply is not None:
         return restful.ok("ok", {"summary": model_reply})
@@ -42,7 +42,7 @@ def get_ai_summary():  # put application's code here
         )
         model_reply = completion.choices[0].message.content
         # 设置缓存，过期时间7
-        cache.set(article_path_key, model_reply, timeout=60 * 60 * 24 * 7)
+        redis.set(article_path_key, model_reply, timeout=60 * 60 * 24 * 7)
     except Exception as e:
         return restful.server_error(e)
 
