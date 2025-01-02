@@ -74,7 +74,6 @@ def check_jwt(token):
     calculated_sign = sha256_hash(
         user_identity, current_app.config["BUSUANZI_JWT_SECRET_KEY"]
     )
-
     # 安全比较签名
     if secrets.compare_digest(calculated_sign, provided_sign):
         return user_identity
