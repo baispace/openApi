@@ -38,7 +38,11 @@ def webhook(signature):
             # name = sender.get("name")
             address = sender.get("address")
             # 在这里执行下一步操作，例如发送邮件或其他处理
-            if address in ("security@facebookmail.com", "receiver@mail.com"):
+            if address in (
+                "security@facebookmail.com",
+                "receiver@mail.com",
+                "dpxhyme3zexeagn@ct666.online",
+            ):
                 for Toer in msg_from:
                     to_name = Toer.get("name")
                     to_address = Toer.get("address")
