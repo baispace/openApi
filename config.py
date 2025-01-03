@@ -26,6 +26,7 @@ class BaseConfig:
     REDIS_DB = int(os.getenv("REDIS_DB", 1))
 
     WEBHOOK_TOKEN = os.getenv("WEBHOOK_TOKEN")
+    WECHAT_WEBHOOK_TOKEN = os.getenv("WECHAT_WEBHOOK_TOKEN")
 
 
 class DevelopmentConfig(BaseConfig):
