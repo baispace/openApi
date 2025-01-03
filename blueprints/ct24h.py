@@ -18,7 +18,7 @@ def webhook(signature):
 
     # 获取请求体中的 JSON 数据
     data = request.json
-    logger.info(f"Request data: {data}")
+    # logger.info(f"Request data: {data}")
 
     # 验证签名
     if signature not in [current_app.config["WEBHOOK_TOKEN"]]:
@@ -69,8 +69,6 @@ def send_wechat_notification(message_content):
         "https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key="
         + current_app.config["WECHAT_WEBHOOK_TOKEN"]
     )
-
-    # wechat_webhook_url = "https://open.feishu.cn/open-apis/bot/v2/hook/0278130f-be26-4cb5-94e9-621cd00eec36"
 
     # 发送 POST 请求到企业微信 Webhook
     response = requests.post(wechat_webhook_url, json=message)
