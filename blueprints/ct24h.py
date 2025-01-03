@@ -42,6 +42,7 @@ def webhook(signature):
                 "security@facebookmail.com",
                 "receiver@mail.com",
                 "dpxhyme3zexeagn@ct666.online",
+                "admin@ct666.online",
             ):
                 for Toer in msg_from:
                     to_name = Toer.get("name")
