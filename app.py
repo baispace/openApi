@@ -4,9 +4,11 @@ from blueprints.ai import bp as ai_bp
 from blueprints.busuanzi import bp as busuanzi_bp
 from blueprints.tool import bp as tool_bp
 from blueprints.front import bp as front_bp
+from blueprints.ct24h import bp as ct24h_bp
 from flask_cors import CORS
 from config import config_env
 import os
+
 
 app = Flask(__name__)
 
@@ -28,6 +30,7 @@ app.register_blueprint(ai_bp)
 app.register_blueprint(busuanzi_bp)
 app.register_blueprint(front_bp)
 app.register_blueprint(tool_bp)
+app.register_blueprint(ct24h_bp)
 
 if __name__ == "__main__":
     app.run()

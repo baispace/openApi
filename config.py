@@ -25,6 +25,8 @@ class BaseConfig:
     REDIS_PORT = int(os.getenv("REDIS_PORT", 6379))
     REDIS_DB = int(os.getenv("REDIS_DB", 1))
 
+    WEBHOOK_TOKEN = os.getenv("WEBHOOK_TOKEN")
+
 
 class DevelopmentConfig(BaseConfig):
     SQLALCHEMY_DATABASE_URI = os.getenv("SQLALCHEMY_DATABASE_URI")
