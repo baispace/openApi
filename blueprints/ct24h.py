@@ -3,6 +3,7 @@ import requests
 from exts import logger
 import json
 from bs4 import BeautifulSoup
+import re
 
 
 bp = Blueprint("ct24h", __name__, url_prefix="/ct24h")
@@ -38,7 +39,7 @@ def webhook(signature):
     plain_text = data.get("plain_text", "")
 
     # 将富文本内容转换为纯文本
-    body_text = convert_html_to_text(body)
+    body_text = remove_urls(convert_html_to_text(body))
 
     # 格式化消息内容
     message_content = (
@@ -81,5 +82,19 @@ def send_wechat_notification(message_content):
 def convert_html_to_text(html_content):
     # 使用 BeautifulSoup 解析 HTML
     soup = BeautifulSoup(html_content, "lxml")
+    # 找到所有链接并删除
+    for a in soup.find_all("a"):
+        a.decompose()  # 删除链接标签
+
     # 提取文本
-    return soup.get_text(separator="\n", strip=True)
+    text = soup.get_text(separator="\n", strip=True)
+
+    # 使用正则表达式去除所有域名链接
+    text = re.sub(r"https?://[^\s]+|www\.[^\s]+", "", text)
+
+    return text.strip()
+
+
+def remove_urls(text):
+    # 使用正则表达式去除所有 URL
+    return re.sub(r"https?://[^\s]+", "", text)
